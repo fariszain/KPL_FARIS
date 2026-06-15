@@ -18,31 +18,45 @@ public class UasTest {
     public void setUp() throws MalformedURLException {
         UiAutomator2Options options = new UiAutomator2Options();
         
-        // Ganti dengan nama device dari perintah 'adb devices' jika pakai HP fisik
-        options.setDeviceName("emulator-5554"); 
+        // Konfigurasi khusus untuk HP fisik Samsung kamu
+        options.setDeviceName("Samsung S25 FE"); 
+        options.setUdid("RRGL102J8VE"); 
         
-        // Path ke APK yang baru saja diunduh
+        // Path ke file APK yang sudah di-download
         options.setApp("/home/zeyn/Documents/KPL/app.apk"); 
         options.setAutomationName("UiAutomator2");
 
+        // Menghubungkan ke server Appium lokal
         driver = new AndroidDriver(new URL("http://127.0.0.1:4723"), options);
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
     }
 
     @Test
     public void testLoginInvalid() {
+        // 1. Buka Hamburger Menu
         driver.findElement(AppiumBy.accessibilityId("open menu")).click();
+        
+        // 2. Pilih menu Log In
         driver.findElement(AppiumBy.accessibilityId("menu item log in")).click();
+        
+        // 3. Masukkan Username yang salah
         driver.findElement(AppiumBy.accessibilityId("Username input field")).sendKeys("user_salah@mail.com");
-        driver.findElement(AppiumBy.accessibilityId("Password input field")).sendKeys("12345");
+        
+        // 4. Masukkan Password asal
+        driver.findElement(AppiumBy.accessibilityId("Password input field")).sendKeys("123456");
+        
+        // 5. Klik tombol Login
         driver.findElement(AppiumBy.accessibilityId("Login button")).click();
         
-        WebElement errorMsg = driver.findElement(AppiumBy.xpath("//android.widget.TextView[@text='Provided credentials do not match.']"));
-        Assert.assertTrue(errorMsg.isDisplayed(), "Pesan error tidak muncul!");
+        // 6. Validasi bahwa pesan error muncul (Asersi)
+        WebElement errorMsg = driver.findElement(AppiumBy.xpath("//android.widget.TextView[contains(@text, 'Provided credentials do not match')]"));
+        Assert.assertTrue(errorMsg.isDisplayed(), "Pesan error tidak muncul, test gagal!");
+        System.out.println("Test Berhasil: Pesan error muncul sesuai harapan.");
     }
 
     @AfterClass
     public void tearDown() {
+        // Menutup aplikasi dan sesi setelah test selesai
         if (driver != null) {
             driver.quit();
         }
