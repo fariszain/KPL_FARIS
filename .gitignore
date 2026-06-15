@@ -1,0 +1,23 @@
+# Maven build outputs
+target/
+*.releaseBackup
+
+# IDEs and Editors configuration
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Log files
+*.log
